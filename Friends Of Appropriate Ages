@@ -1,0 +1,50 @@
+class Solution {
+    public int numFriendRequests(int[] ages) {
+        int[] ageCount = new int[121]; // To count the number of people at each age
+
+        // Count the number of people at each age
+        for (int age : ages) {
+            ageCount[age]++;
+        }
+
+        int requests = 0;
+
+        // Iterate through ages array to check friend requests
+        for (int ageA = 1; ageA <= 120; ageA++) {
+            for (int ageB = 1; ageB <= 120; ageB++) {
+                if (ageCount[ageA] > 0 && ageCount[ageB] > 0) {
+                    if (isValidRequest(ageA, ageB)) {
+                        if (ageA == ageB) {
+                            requests += ageCount[ageA] * (ageCount[ageA] - 1);
+                        } else {
+                            requests += ageCount[ageA] * ageCount[ageB];
+                        }
+                    }
+                }
+            }
+        }
+
+        return requests;
+    }
+
+    // Check whether a friend request should be made based on the given conditions
+    private boolean isValidRequest(int ageA, int ageB) {
+        return !(ageB <= 0.5 * ageA + 7 || ageB > ageA || (ageB > 100 && ageA < 100));
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+
+        // Example 1
+        int[] ages1 = {16, 16};
+        System.out.println(solution.numFriendRequests(ages1)); // Output: 2
+
+        // Example 2
+        int[] ages2 = {16, 17, 18};
+        System.out.println(solution.numFriendRequests(ages2)); // Output: 2
+
+        // Example 3
+        int[] ages3 = {20, 30, 100, 110, 120};
+        System.out.println(solution.numFriendRequests(ages3)); // Output: 3
+    }
+}
