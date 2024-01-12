@@ -1,0 +1,43 @@
+import java.util.HashMap;
+import java.util.PriorityQueue;
+
+class Solution {
+    public String frequencySort(String s) {
+        // Create a HashMap to store the frequency of each character
+        HashMap<Character, Integer> charFrequencyMap = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            charFrequencyMap.put(c, charFrequencyMap.getOrDefault(c, 0) + 1);
+        }
+
+        // Create a Priority Queue (Min Heap) to store characters based on their frequencies
+        PriorityQueue<Character> maxHeap = new PriorityQueue<>((a, b) -> charFrequencyMap.get(b) - charFrequencyMap.get(a));
+        maxHeap.addAll(charFrequencyMap.keySet());
+
+        // Build the result string by appending characters from the Priority Queue
+        StringBuilder result = new StringBuilder();
+        while (!maxHeap.isEmpty()) {
+            char currentChar = maxHeap.poll();
+            for (int i = 0; i < charFrequencyMap.get(currentChar); i++) {
+                result.append(currentChar);
+            }
+        }
+
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+
+        // Example 1
+        String s1 = "tree";
+        System.out.println(solution.frequencySort(s1)); // Output: "eert" or "eetr"
+
+        // Example 2
+        String s2 = "cccaaa";
+        System.out.println(solution.frequencySort(s2)); // Output: "aaaccc" or "cccaaa"
+
+        // Example 3
+        String s3 = "Aabb";
+        System.out.println(solution.frequencySort(s3)); // Output: "bbAa" or "bbaA"
+    }
+}
